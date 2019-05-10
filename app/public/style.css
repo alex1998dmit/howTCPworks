@@ -1,0 +1,33 @@
+svg line {
+  fill: #000;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.container {
+    padding-top: 30px;
+}
+
+#client-img {
+    width: 50%;
+}
+
+#server-img {
+    width: 90%;
+    margin-top: -29px;
+}
+
+.img-box {
+    width: 815px;
+    border-left: 4px solid black;
+    border-right: 5px solid black;
+}
+
+.arrow {
+    width: 50%;
+    margin-left: 25%;
+}
+
+.state-sign {
+    display: none;
+}
