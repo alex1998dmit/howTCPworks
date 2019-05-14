@@ -9,12 +9,12 @@ svg line {
 }
 
 #client-img {
-    width: 50%;
+    width: 35%;
 }
 
 #server-img {
-    width: 90%;
-    margin-top: -29px;
+    width: 65%;
+    margin-top: -20px;
 }
 
 .img-box {
@@ -29,5 +29,24 @@ svg line {
 }
 
 .state-sign {
-    display: none;
+    padding: 5%
+    /* color: green; */
+}
+
+.arrow {
+    opacity: 0.1;
+    margin-bottom: -15%;
+}
+
+.arrow-second {
+    transform: rotate(180deg);
+}
+
+.arrow-attributes {
+    margin-left: 50%;
+    opacity: 0;
+}
+
+#start-state-button {
+    /* padding: 40px; */
 }
