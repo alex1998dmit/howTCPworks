@@ -195,8 +195,6 @@ class ServerReceived {
         this.mainState.ack = generateRandomSeq();
         this.mainState.seq++;
         [this.mainState.seq, this.mainState.ack] = [this.mainState.ack, this.mainState.seq];
-        this.mainState.cli = ["ACK"];
-        this.mainState.changeTable();
     }
 
     clickFirstButton() {
@@ -251,8 +249,7 @@ class ClientGetRstFlag {
 
     setParams() {
         this.mainState.signState = "Клиент получил RST-флаг, соединение разорвано";
-        this.mainState.srcPort = this.mainState.dstPort;
-        this.mainState.dstPort = this.mainState.srcPort;
+        [this.mainState.srcPort, this.mainState.dstPort] = [this.mainState.dstPort, this.mainState.srcPort];
         this.mainState.cli = ["RST"];
         this.mainState.side = "client";
         this.mainState.changeTable();
@@ -276,6 +273,8 @@ class ClientGetAckAndSyn  {
         this.mainState.side = "client";
         this.mainState.clientStatus = "SYN-RECEIVED";
         this.mainState.serverStatus = "SEND-SYN";
+        this.mainState.cli = ["SYN, ACK"];
+        [this.mainState.srcPort, this.mainState.dstPort] = [this.mainState.dstPort, this.mainState.srcPort];
         this.mainState.changeTable();
     }
 
@@ -305,6 +304,8 @@ class EstablishedServer {
         this.mainState.serverStatus = "Established";
         this.mainState.clientStatus = "Established";
         this.mainState.side = "server";
+        [this.mainState.seq, this.mainState.ack] = [this.mainState.ack, this.mainState.seq];
+        this.mainState.changeTable();
     }
 }   
 // -------------------------------------------------------------------
