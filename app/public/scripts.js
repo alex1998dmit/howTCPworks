@@ -48,8 +48,7 @@ class Main {
         this.changeStatusSign();
         this.showIPs();
         this.showSide();
-        this.showArrow();
-        this.changeTable();
+        this.showArrow();        
         this.changeClientStatus();
         this.changeServerStatus();
     }
@@ -73,11 +72,15 @@ class Main {
     }
 
     changeTable() {
-        $(".table-seq").text(`${this.seq}`);
-        $(".table-ack").text(`${this.ack}`);
-        $(".table-src-port").text(`${this.srcPort}`);
-        $(".table-dst-port").text(`${this.dstPort}`);
-        $(".table-cli").text(`${this.cli.join(', ')}`);
+        $("tbody").append(`
+            <tr>
+                <td class="table-seq">${this.seq}</td>
+                <td class="table-ack">${this.ack}</td>
+                <td class="table-src-port">${this.srcPort}</td>
+                <td class="table-dst-port">${this.dstPort}</td>
+                <td class="table-cli">${this.cli.join(', ')}</td>
+            </tr>
+        `);
     }
 
     changeClientStatus() {
@@ -129,6 +132,7 @@ class StartState {
         this.mainState.arrow = "first";
         this.mainState.seq = generateRandomSeq();
         this.mainState.cli = ["SYN"];
+        this.mainState.changeTable();
     }
 
     clickFirstButton() {
@@ -192,6 +196,7 @@ class ServerReceived {
         this.mainState.seq++;
         [this.mainState.seq, this.mainState.ack] = [this.mainState.ack, this.mainState.seq];
         this.mainState.cli = ["ACK"];
+        this.mainState.changeTable();
     }
 
     clickFirstButton() {
@@ -250,6 +255,7 @@ class ClientGetRstFlag {
         this.mainState.dstPort = this.mainState.srcPort;
         this.mainState.cli = ["RST"];
         this.mainState.side = "client";
+        this.mainState.changeTable();
     }
 }
 // ---------------------------------------------------------------------------------
@@ -270,6 +276,7 @@ class ClientGetAckAndSyn  {
         this.mainState.side = "client";
         this.mainState.clientStatus = "SYN-RECEIVED";
         this.mainState.serverStatus = "SEND-SYN";
+        this.mainState.changeTable();
     }
 
     clickFirstButton() {

@@ -1,4 +1,4 @@
-# Three handshake emulator #
+# Three handshake emulator (TCP) #
 
 ## Dependecies ##
 
