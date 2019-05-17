@@ -287,12 +287,12 @@ class ClientGetAckAndSyn  {
         $("#start-state-button").append(`<button type="button" id="final-state" class="btn btn-info first-button">Send ACK</button>`);
     }
 }
-
 // ------------------------------------------------
 class EstablishedServer {
     constructor(mainState) {
         this.mainState = mainState;
         this.setParams();
+        this.renderSendAllDataButton();
     }
 
     setParams() {
@@ -307,7 +307,109 @@ class EstablishedServer {
         [this.mainState.seq, this.mainState.ack] = [this.mainState.ack, this.mainState.seq];
         this.mainState.changeTable();
     }
-}   
+
+    renderSendAllDataButton() {
+        $("#start-state-button").append(`<button type="button" id="final-state" class="btn btn-info first-button">Send all data</button>`);
+    }
+
+    clickFirstButton() {
+        this.mainState.state = new SendedAllData(this.mainState);
+        this.mainState.render();
+    }
+}
+
+class SendedAllData {
+    constructor(mainState) {
+        this.mainState = mainState;
+        this.setParams();
+        this.renderCloseConnectionButton();        
+    }
+
+    setParams() {
+        this.mainState.signState = "Все данные переданы, подготовка к закрытию соединения";
+    }
+
+    renderCloseConnectionButton() {
+        $("#start-state-button").append(`<button type="button" id="final-state" class="btn btn-info first-button">Close connection</button>`);
+    }
+
+    clickFirstButton() {
+        this.mainState.state = new CloseConnectionFromServer(this.mainState);
+        this.mainState.render();
+    }
+}
+
+class CloseConnectionFromServer {
+    constructor(mainState) {
+        this.mainState = mainState;
+        this.setParams();
+        this.mainState.changeTable();
+        this.renderCloseConnectionFromServerSide();
+    }
+
+    setParams() {
+        [this.mainState.srcPort, this.mainState.dstPort] = [this.mainState.dstPort, this.mainState.srcPort];
+        this.mainState.signState = "Закрытие соединения со стороны сервера";
+        this.mainState.cli = ["FIN", "ACK"];
+        this.mainState.seq = generateRandomSeq();
+        this.mainState.ack = generateRandomSeq();
+        this.mainState.side = "server";
+        this.mainState.arrow = "fourth";
+        this.mainState.serverStatus = "";
+        this.mainState.clientStatus = "";
+    }
+
+    renderCloseConnectionFromServerSide() {
+        $("#start-state-button").append(`<button type="button" id="final-state" class="btn btn-info first-button">Close connection (SERVER)</button>`);
+    }
+
+    clickFirstButton() {
+        this.mainState.state = new CloseConnectionFromClient(this.mainState);
+        this.mainState.render();
+    }
+}
+
+class CloseConnectionFromClient {
+    constructor(mainState) {
+        this.mainState = mainState;
+        this.setPatams();
+        this.mainState.changeTable();
+        this.renderCloseConnectionFromClientSid();
+    }
+
+    setPatams() {
+        this.mainState.signState = "Закрытие соединения со стороны пользователя. Соединение закрыто";
+        [this.mainState.srcPort, this.mainState.dstPort] = [this.mainState.dstPort, this.mainState.srcPort];
+        [this.mainState.ack, this.mainState.seq] = [this.mainState.seq, this.mainState.ack];
+        this.mainState.ack++;
+        this.mainState.side = "client";
+        this.mainState.arrow = "fivth";
+        this.mainState.serverStatus = "SEND FIN, ACK";
+        this.mainState.clientStatus = "RECEIVED FIN, ACK";
+    }
+
+    renderCloseConnectionFromClientSid() {
+        $("#start-state-button").append(`<button type="button" id="final-state" class="btn btn-info first-button">Close connection (CLIENT)</button>`);
+    }
+
+    clickFirstButton() {
+        this.mainState.state = new ClosedConnection(this.mainState);
+        this.mainState.render();
+    }
+}
+
+class ClosedConnection {
+    constructor(mainState) {
+        this.mainState = mainState;
+        this.setParams();
+    }
+
+    setParams() {
+        this.mainState.signState = "Соединение закрыто";
+        this.mainState.clientStatus = "CLOSED";
+        this.mainState.serverStatus = "CLOSED";
+    }
+}
 // -------------------------------------------------------------------
 // Logic
 let tcp = new Main();

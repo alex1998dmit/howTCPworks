@@ -38,7 +38,7 @@ svg line {
     margin-bottom: -15%;
 }
 
-.arrow-second {
+.arrow-second, .arrow-fourth {
     transform: rotate(180deg);
 }
 
